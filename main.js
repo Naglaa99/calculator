@@ -60,6 +60,8 @@ const calculate = (buttonValue) => {
   } else if (buttonValue === "C") {
     output = "";
     elements.historyDisplay.innerHTML = "";
+    elements.displayOutput.value = "0";
+    return; 
   }
   else if (buttonValue === "+/-") {
     if (output) {
