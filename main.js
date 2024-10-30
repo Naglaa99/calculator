@@ -10,6 +10,7 @@ const elements = {
   darkModeButtons: document.querySelectorAll(".dark-button"),
   operationButtons: document.querySelectorAll(".operation-button"),
   firstRowOperations: document.querySelectorAll(".first-row-operations"),
+  body: document.body,
 };
 
 const specialChars = ["%", "/", "*", "-", "+", "="];
@@ -61,9 +62,8 @@ const calculate = (buttonValue) => {
     output = "";
     elements.historyDisplay.innerHTML = "";
     elements.displayOutput.value = "0";
-    return; 
-  }
-  else if (buttonValue === "+/-") {
+    return;
+  } else if (buttonValue === "+/-") {
     if (output) {
       output = (parseFloat(output) * -1).toString();
     }
@@ -83,6 +83,8 @@ elements.darkMode.addEventListener("click", () => {
     isDarkMode ? "bx-sun" : "bx-moon",
     isDarkMode ? "bx-moon" : "bx-sun"
   );
+
+  elements.body.classList.toggle("bg-[#111113]", isDarkMode);
 
   elements.calculateContainer.classList.replace(
     isDarkMode ? "bg-slate-50" : "bg-[#33363D]",
@@ -110,7 +112,6 @@ elements.darkMode.addEventListener("click", () => {
     button.classList.toggle("bg-gray-500", isDarkMode);
     button.classList.toggle("text-white", isDarkMode);
   });
-
 });
 
 applyButtonStyle();
