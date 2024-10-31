@@ -13,7 +13,7 @@ const elements = {
   body: document.body,
 };
 
-const specialChars = ["%", "/", "*", "-", "+", "="];
+const specialChars = ["+/-", "%", "/", "*", "-", "+", "="];
 let output = "";
 
 // Function to apply styles and event listeners to each button
@@ -47,7 +47,6 @@ const formatNumber = (num) => {
 // Function to perform calculations based on button values
 const calculate = (buttonValue) => {
   elements.displayOutput.focus();
-
   if (buttonValue === "=" && output !== "") {
     const formattedOutput = output.replace(/(\d+)(?=(\d{3})+(?!\d))/g, "$1,");
     elements.historyDisplay.innerHTML = formattedOutput;
