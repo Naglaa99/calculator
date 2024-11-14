@@ -8,100 +8,62 @@
       content="Efficient and user-friendly calculator for quick, accurate calculations with basic and advanced functions, on any device" />
     <title>Calculator</title>
 
-    <link
-      rel="icon"
-      href="./assets/calculator-favicon.ico"
-      type="image/x-icon" />
-
-    <!--Google Fonts-->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-      rel="stylesheet" />
+    <link rel="icon" href="./assets/favicon.ico" type="image/x-icon" />
 
     <!-- Importing Boxicons for icons -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
 
-    <!-- Importing Tailwind CSS via CDN for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- External css link -->
+    <link href="./dist/output.css" rel="stylesheet" />
   </head>
 
-  <body
-    class="flex justify-center items-center min-h-screen bg-zinc-300 font-poppins">
+  <body class="flex justify-center items-center min-h-screen bg-zinc-300">
     <div
       class="calculate-container max-w-[330px] w-full bg-slate-50 h-auto rounded-[30px] p-[12px] my-[10px]">
       <div
         id="darkModeToggle"
-        class="bg-slate-200 text- w-[55px] px-2 py-1 text-center text-[25px] cursor-pointer rounded-tl-[30px] rounded-r-[2rem]">
+        class="bg-slate-200 w-[55px] px-2 py-1 text-center text-[25px] cursor-pointer rounded-tl-[30px] rounded-r-[2rem]">
         <i class="bx bx-sun"></i>
       </div>
 
       <div class="display-container flex flex-col mt-[40px] mb-[30px]">
         <span
-          class="history w-full h-[30px] text-right text-gray-400 font-light font-roboto text-[25px]"></span>
+          class="history w-full h-[30px] text-right text-gray-400 font-light text-[25px]"></span>
         <input
           type="text"
-          class="display outline-none text-[50px] font-roboto font-extralight w-full h-[70px] text-right bg-transparent border-none"
+          class="display outline-none text-[50px] font-extralight w-full h-[70px] text-right bg-transparent border-none"
           readonly />
       </div>
 
       <div
         class="buttons flex flex-wrap justify-between gap-y-[15px] mb-[30px]">
-        <button
-          data-value="C"
-          class="bg-gray-300 operation-button first-row-operations">
+        <button data-value="C" class="operation-button first-row-operations">
           C
         </button>
-        <button
-          data-value="+/-"
-          class="bg-gray-300 operation-button first-row-operations">
+        <button data-value="+/-" class="operation-button first-row-operations">
           +/-
         </button>
-        <button
-          data-value="%"
-          class="bg-gray-300 operation-button first-row-operations">
+        <button data-value="%" class="operation-button first-row-operations">
           &percnt;
         </button>
-        <button
-          data-value="/"
-          class="bg-orange-400 text-white operation-button">
-          &divide;
-        </button>
-        <button data-value="7" class="bg-white dark-button">7</button>
-        <button data-value="8" class="bg-white dark-button">8</button>
-        <button data-value="9" class="bg-white dark-button">9</button>
-        <button
-          data-value="*"
-          class="bg-orange-400 text-white operation-button">
-          &times;
-        </button>
-        <button data-value="4" class="bg-white dark-button">4</button>
-        <button data-value="5" class="bg-white dark-button">5</button>
-        <button data-value="6" class="bg-white dark-button">6</button>
-        <button
-          data-value="-"
-          class="bg-orange-400 text-white operation-button">
-          &minus;
-        </button>
-        <button data-value="1" class="bg-white dark-button">1</button>
-        <button data-value="2" class="bg-white dark-button">2</button>
-        <button data-value="3" class="bg-white dark-button">3</button>
-        <button
-          data-value="+"
-          class="bg-orange-400 text-white operation-button">
-          &plus;
-        </button>
-        <button data-value="0" class="bg-white flex-grow dark-button">0</button>
-        <button data-value="." class="bg-white mx-2 dark-button">.</button>
-        <button
-          data-value="="
-          class="bg-orange-400 text-white operation-button">
-          &equals;
-        </button>
+        <button data-value="/" class="operation-button">&divide;</button>
+        <button data-value="7" class="dark-button">7</button>
+        <button data-value="8" class="dark-button">8</button>
+        <button data-value="9" class="dark-button">9</button>
+        <button data-value="*" class="operation-button">&times;</button>
+        <button data-value="4" class="dark-button">4</button>
+        <button data-value="5" class="dark-button">5</button>
+        <button data-value="6" class="dark-button">6</button>
+        <button data-value="-" class="operation-button">&minus;</button>
+        <button data-value="1" class="dark-button">1</button>
+        <button data-value="2" class="dark-button">2</button>
+        <button data-value="3" class="dark-button">3</button>
+        <button data-value="+" class="operation-button">&plus;</button>
+        <button data-value="0" class="flex-grow dark-button">0</button>
+        <button data-value="." class="mx-2 dark-button">.</button>
+        <button data-value="=" class="operation-button">&equals;</button>
       </div>
     </div>
 

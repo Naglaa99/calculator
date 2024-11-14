@@ -1,7 +1,7 @@
 // Select various elements from the DOM
 const elements = {
   buttonsContainer: document.querySelector(".buttons"),
-  calculateButton: document.querySelectorAll("button"),
+  calculateButtons: document.querySelectorAll("button"),
   historyDisplay: document.querySelector(".history"),
   displayOutput: document.querySelector(".display"),
   darkMode: document.getElementById("darkModeToggle"),
@@ -13,12 +13,23 @@ const elements = {
   body: document.body,
 };
 
+/** 
+ * @type {string[]} 
+ * @description An array of special characters used in the calculator.
+ */
 const specialChars = ["+/-", "%", "/", "*", "-", "+", "="];
+
+/** 
+ * @type {string} 
+ * @description Holds the current output value of the calculator.
+ */
 let output = "";
 
-// Function to apply styles and event listeners to each button
+/**
+ * Applies styles and event listeners to each button in the calculator.
+ */
 const applyButtonStyle = () => {
-  elements.calculateButton.forEach((button) => {
+  elements.calculateButtons.forEach((button) => {
     button.classList.add(
       "w-[70px]",
       "h-[70px]",
@@ -31,86 +42,148 @@ const applyButtonStyle = () => {
       "shadow-gray-400",
       "active:scale-[0.95]"
     );
+    const value = button.dataset.value;
 
+    value == "C" || value == "+/-" || value == "%"
+      ? button.classList.add("bg-gray-300")
+      : value == "/" ||
+        value == "*" ||
+        value == "+" ||
+        value == "-" ||
+        value == "="
+      ? button.classList.add("bg-orange-400", "text-white")
+      : button.classList.add("bg-white", "dark-button");
+  });
+};
+
+/**
+ * Adds click event listeners to each calculator button to handle user input.
+ */
+const addClickHandlersToButtons = () => {
+  elements.calculateButtons.forEach((button) => {
     button.addEventListener("click", (event) => {
-      calculate(event.target.dataset.value);
+      handleCalculatorInput(event.target.dataset.value);
     });
   });
 };
 
-// Function to format numbers with thousands separators
-const formatNumber = (num) => {
-  if (isNaN(num) || num === null) return num;
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
-// Function to perform calculations based on button values
-const calculate = (buttonValue) => {
-  elements.displayOutput.focus();
+/**
+ * Handles the calculator input based on the button value clicked by the user.
+ * @param {string} buttonValue - The value of the button that was clicked.
+ */
+const handleCalculatorInput = (buttonValue) => {
   if (buttonValue === "=" && output !== "") {
-    const formattedOutput = output.replace(/(\d+)(?=(\d{3})+(?!\d))/g, "$1,");
-    elements.historyDisplay.innerHTML = formattedOutput;
-    output = eval(output.replace("%", "/100"));
-
-    if (Number.isInteger(output)) {
-      output = output.toString();
-    } else {
-      output = parseFloat(output).toFixed(3);
-    }
+    displayResult();
   } else if (buttonValue === "C") {
-    output = "";
-    elements.historyDisplay.innerHTML = "";
-    elements.displayOutput.value = "0";
+    clearCalculator();
     return;
   } else if (buttonValue === "+/-") {
-    if (output) {
-      output = (parseFloat(output) * -1).toString();
-    }
+    toggleSign();
   } else {
-    if (output === "" && specialChars.includes(buttonValue)) return;
-    output += buttonValue;
+    appendToOutput(buttonValue);
   }
 
   elements.displayOutput.value = formatNumber(output);
 };
 
-// Event listener for dark mode toggle button
+/**
+ * Calculates and displays the result in the calculator output.
+ */
+const displayResult = () => {
+  const formattedOutput = output.replace(/(\d+)(?=(\d{3})+(?!\d))/g, "$1,");
+  elements.historyDisplay.innerHTML = formattedOutput;
+  output = calculateOutput(output);
+  output = formatResult(output);
+};
+
+/**
+ * Clears the calculator output and history.
+ */
+const clearCalculator = () => {
+  output = "";
+  elements.historyDisplay.innerHTML = "";
+  elements.displayOutput.value = "0";
+};
+
+/**
+ * Toggles the sign of the current output value.
+ */
+const toggleSign = () => {
+  if (output) {
+    output = (parseFloat(output) * -1).toString();
+  }
+};
+
+/**
+ * Appends a button value to the current output if it is a valid entry.
+ * @param {string} buttonValue - The value of the button to append to the output.
+ */
+const appendToOutput = (buttonValue) => {
+  if (output === "" && specialChars.includes(buttonValue)) return;
+  output += buttonValue;
+};
+
+/**
+ * Evaluates the current output string and returns the calculated result.
+ * @param {string} output - The current calculator output to evaluate.
+ * @returns {number} - The result of the calculation.
+ */
+const calculateOutput = (output) => {
+  return eval(output.replace("%", "/100"));
+};
+
+/**
+ * Formats the result to display up to three decimal places if it is not an integer.
+ * @param {number} output - The calculated output to format.
+ * @returns {string} - The formatted result as a string.
+ */
+const formatResult = (output) => {
+  if (Number.isInteger(output)) return output.toString();
+  else return parseFloat(output).toFixed(3);
+};
+
+/**
+ * Formats a number to include commas as thousand separators.
+ * @param {string|number} num - The number to format.
+ * @returns {string} - The formatted number as a string.
+ */
+const formatNumber = (num) => {
+  if (isNaN(num) || num === null) return num;
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+/**
+ * Toggles dark mode styles for various elements in the calculator interface.
+ * 
+ * This function is triggered by a "click" event on the dark mode toggle button (`elements.darkMode`). 
+ * It switches the application between light and dark themes by adding or removing specific CSS classes 
+ * for the dark mode across various elements, including the body, icon, display, and buttons.
+ * 
+ * @event elements.darkMode#click
+ */
+
 elements.darkMode.addEventListener("click", () => {
-  const isDarkMode = document.documentElement.classList.toggle("dark");
+  elements.body.classList.toggle("dark");
 
-  elements.darkModeIcon.classList.replace(
-    isDarkMode ? "bx-sun" : "bx-moon",
-    isDarkMode ? "bx-moon" : "bx-sun"
-  );
+  elements.darkModeIcon.classList.toggle("bx-sun");
+  elements.darkModeIcon.classList.toggle("bx-moon");
 
-  elements.body.classList.toggle("bg-[#111113]", isDarkMode);
+  elements.displayOutput.classList.toggle("displayOutputDark");
+  elements.calculateContainer.classList.toggle("calculateContainerDark");
+  elements.darkMode.classList.toggle("darkModeContainer");
 
-  elements.calculateContainer.classList.replace(
-    isDarkMode ? "bg-slate-50" : "bg-[#33363D]",
-    isDarkMode ? "bg-[#33363D]" : "bg-slate-50"
-  );
-
-  elements.displayOutput.classList.toggle("text-white", isDarkMode);
-
-  elements.darkMode.classList.toggle("bg-gray-600", isDarkMode);
-  elements.darkMode.classList.toggle("bg-slate-200", !isDarkMode);
-  elements.darkMode.classList.toggle("text-slate-300", isDarkMode);
-
-  elements.darkModeButtons.forEach((button) => {
-    button.classList.toggle("bg-gray-700", isDarkMode);
-    button.classList.toggle("bg-white", !isDarkMode);
-    button.classList.toggle("text-white", isDarkMode);
-    button.classList.toggle("shadow-gray-800", isDarkMode);
+  elements.darkModeButtons.forEach((style) => {
+    style.classList.toggle("darkModeButtons");
   });
 
-  elements.operationButtons.forEach((button) => {
-    button.classList.toggle("shadow-gray-800", isDarkMode);
+  elements.operationButtons.forEach((style) => {
+    style.classList.toggle("operationButtonsDark");
   });
 
-  elements.firstRowOperations.forEach((button) => {
-    button.classList.toggle("bg-gray-500", isDarkMode);
-    button.classList.toggle("text-white", isDarkMode);
+  elements.firstRowOperations.forEach((style) => {
+    style.classList.toggle("firstRowOperationsDark");
   });
 });
 
 applyButtonStyle();
+addClickHandlersToButtons();
